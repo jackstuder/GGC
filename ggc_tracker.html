@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily GGC Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .student-input {
+            margin-bottom: 25px;
+        }
+
+        .student-input label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .student-input input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .student-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .ggc-section {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .ggc-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid;
+        }
+
+        .goal {
+            border-left-color: #28a745;
+        }
+
+        .gratitude {
+            border-left-color: #ffc107;
+        }
+
+        .compliment {
+            border-left-color: #007bff;
+        }
+
+        .ggc-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .ggc-item textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .ggc-item textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .entries-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e1e5e9;
+        }
+
+        .entries-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .entry {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .entry-student {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .entry-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .entry-ggc {
+            display: grid;
+            gap: 15px;
+        }
+
+        .entry-item {
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+
+        .entry-goal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .entry-gratitude {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .entry-compliment {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .entry-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .no-entries {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .toggle-btn {
+            background: #e9ecef;
+            color: #495057;
+            border: 2px solid #e9ecef;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .toggle-btn:hover {
+            background: #5a6fd8;
+            color: white;
+            border-color: #5a6fd8;
+        }
+
+        .ms-form-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e1e5e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Daily GGC Tracker</h1>
+            <p>Track your Goal, Gratitude, and Compliment each day!</p>
+        </div>
+
+        <div class="content">
+            <!-- Toggle between local form and Microsoft Forms -->
+            <div class="form-toggle" style="margin-bottom: 20px; text-align: center;">
+                <button id="localFormBtn" class="toggle-btn active" onclick="showLocalForm()">Local Form</button>
+                <button id="msFormBtn" class="toggle-btn" onclick="showMSForm()">Microsoft Forms</button>
+            </div>
+
+            <!-- Local Form Section -->
+            <div id="localFormSection" class="form-section">
+                <div id="successMessage" class="success-message" style="display: none;">
+                    GGC entry saved successfully! 🎉
+                </div>
+
+                <div class="student-input">
+                    <label for="studentName">Your Name:</label>
+                    <input type="text" id="studentName" placeholder="Enter your name" required>
+                </div>
+
+                <div class="ggc-section">
+                    <div class="ggc-item goal">
+                        <h3>🎯 My Goal for Today</h3>
+                        <textarea id="goal" placeholder="What do you want to accomplish today?"></textarea>
+                    </div>
+
+                    <div class="ggc-item gratitude">
+                        <h3>🙏 Something I'm Grateful For</h3>
+                        <textarea id="gratitude" placeholder="What are you thankful for today?"></textarea>
+                    </div>
+
+                    <div class="ggc-item compliment">
+                        <h3>💝 A Compliment (for yourself or someone else)</h3>
+                        <textarea id="compliment" placeholder="Share a kind word or positive thought"></textarea>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="saveGGC()">Save My GGC</button>
+            </div>
+
+            <!-- Microsoft Forms Section -->
+            <div id="msFormSection" class="form-section" style="display: none;">
+                <div class="ms-form-container">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #333;">
+                        Submit via Microsoft Forms
+                    </h3>
+                    
+                    <!-- Setup Complete -->
+                    <div id="setupInstructions" style="background: #d4edda; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #28a745; display: none;">
+                        <h4 style="color: #155724; margin-bottom: 10px;">✅ Microsoft Forms Ready!</h4>
+                        <p style="color: #155724; margin-bottom: 10px;">Your Microsoft Form is now integrated and ready to use.</p>
+                        <p style="color: #155724; font-size: 0.9rem; margin-top: 10px;">
+                            <strong>Status:</strong> Form is configured and working properly.
+                        </p>
+                    </div>
+                    
+                    <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                        Complete the form below or open in a new tab for better mobile experience.
+                    </p>
+                    
+                    <!-- Microsoft Forms Embed -->
+                    <iframe 
+                        id="msFormEmbed" 
+                        src="https://forms.office.com/Pages/ResponsePage.aspx?id=XSgInOdRekKbpARNQZnKl8thP89AqyRIoacZckBiU1tURVcxMFVZTkRXR0RDRVZXRUYzRlNJQTVOWS4u&embed=true" 
+                        width="100%" 
+                        height="600" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0"
+                        onerror="showFormError()">
+                        Loading Microsoft Forms...
+                    </iframe>
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="submit-btn" onclick="openMSFormInNewTab()" style="width: auto; padding: 10px 20px; margin-right: 10px;">
+                            Open in New Tab
+                        </button>
+                        <button class="submit-btn" onclick="showSetupInstructions()" style="width: auto; padding: 10px 20px; background: #6c757d;">
+                            Setup Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="entries-section">
+                <h2 class="entries-title">Previous Entries</h2>
+                <div id="entriesList">
+                    <div class="no-entries">No entries yet. Start by adding your first GGC!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveGGC() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const goal = document.getElementById('goal').value.trim();
+            const gratitude = document.getElementById('gratitude').value.trim();
+            const compliment = document.getElementById('compliment').value.trim();
+
+            // Enhanced validation
+            if (!studentName || !goal || !gratitude || !compliment) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            // Check for reasonable length limits
+            if (studentName.length > 50) {
+                alert('Student name is too long (max 50 characters)');
+                return;
+            }
+
+            if (goal.length > 500 || gratitude.length > 500 || compliment.length > 500) {
+                alert('One or more fields are too long (max 500 characters each)');
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                studentName: studentName,
+                goal: goal,
+                gratitude: gratitude,
+                compliment: compliment,
+                date: new Date().toLocaleDateString(),
+                timestamp: new Date().toISOString()
+            };
+
+            // Get existing entries from localStorage
+            let entries = JSON.parse(localStorage.getItem('ggcEntries')) || [];
+            entries.unshift(entry); // Add to beginning of array
+            
+            // Store in localStorage
+            localStorage.setItem('ggcEntries', JSON.stringify(entries));
+
+            // Clear ALL form fields
+            document.getElementById('studentName').value = '';
+            document.getElementById('goal').value = '';
+            document.getElementById('gratitude').value = '';
+            document.getElementById('compliment').value = '';
+
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+
+            // Update entries display
+            displayEntries();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function displayEntries() {
+            const entriesList = document.getElementById('entriesList');
+            const entries = JSON.parse(localStorage.getItem('ggcEntries')) || [];
+
+            if (entries.length === 0) {
+                entriesList.innerHTML = '<div class="no-entries">No entries yet. Start by adding your first GGC!</div>';
+                return;
+            }
+
+            entriesList.innerHTML = entries.map(entry => `
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-student">${escapeHtml(entry.studentName)}</span>
+                        <span class="entry-date">${escapeHtml(entry.date)}</span>
+                    </div>
+                    <div class="entry-ggc">
+                        <div class="entry-item entry-goal">
+                            <div class="entry-label">🎯 Goal:</div>
+                            ${escapeHtml(entry.goal)}
+                        </div>
+                        <div class="entry-item entry-gratitude">
+                            <div class="entry-label">🙏 Gratitude:</div>
+                            ${escapeHtml(entry.gratitude)}
+                        </div>
+                        <div class="entry-item entry-compliment">
+                            <div class="entry-label">💝 Compliment:</div>
+                            ${escapeHtml(entry.compliment)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add character counters
+        function updateCharCount(textareaId, maxLength) {
+            const textarea = document.getElementById(textareaId);
+            const currentLength = textarea.value.length;
+            const remaining = maxLength - currentLength;
+            
+            // Create or update counter
+            let counter = document.getElementById(textareaId + '-counter');
+            if (!counter) {
+                counter = document.createElement('div');
+                counter.id = textareaId + '-counter';
+                counter.style.cssText = 'font-size: 0.8rem; color: #666; text-align: right; margin-top: 5px;';
+                textarea.parentNode.appendChild(counter);
+            }
+            
+            counter.textContent = `${currentLength}/${maxLength} characters`;
+            counter.style.color = remaining < 50 ? '#ff6b6b' : '#666';
+        }
+
+        // Toggle between local form and Microsoft Forms
+        function showLocalForm() {
+            document.getElementById('localFormSection').style.display = 'block';
+            document.getElementById('msFormSection').style.display = 'none';
+            document.getElementById('localFormBtn').classList.add('active');
+            document.getElementById('msFormBtn').classList.remove('active');
+        }
+
+        function showMSForm() {
+            document.getElementById('localFormSection').style.display = 'none';
+            document.getElementById('msFormSection').style.display = 'block';
+            document.getElementById('localFormBtn').classList.remove('active');
+            document.getElementById('msFormBtn').classList.add('active');
+        }
+
+        function openMSFormInNewTab() {
+            // Your actual Microsoft Forms URL
+            const msFormUrl = 'https://forms.office.com/Pages/ResponsePage.aspx?id=XSgInOdRekKbpARNQZnKl8thP89AqyRIoacZckBiU1tURVcxMFVZTkRXR0RDRVZXRUYzRlNJQTVOWS4u';
+            
+            window.open(msFormUrl, '_blank');
+        }
+
+        function showFormError() {
+            const iframe = document.getElementById('msFormEmbed');
+            iframe.style.display = 'none';
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                background: #f8d7da;
+                color: #721c24;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+                border: 1px solid #f5c6cb;
+            `;
+            errorDiv.innerHTML = `
+                <h4>⚠️ Form Not Found</h4>
+                <p>The Microsoft Form URL needs to be configured.</p>
+                <p>Please follow the setup instructions above to create your form and update the URL.</p>
+            `;
+            
+            iframe.parentNode.insertBefore(errorDiv, iframe);
+        }
+
+        function showSetupInstructions() {
+            const instructions = document.getElementById('setupInstructions');
+            if (instructions.style.display === 'none') {
+                instructions.style.display = 'block';
+            } else {
+                instructions.style.display = 'none';
+            }
+        }
+
+        // Add event listeners for character counting
+        document.addEventListener('DOMContentLoaded', function() {
+            displayEntries();
+            
+            // Add character counters to textareas
+            const textareas = ['goal', 'gratitude', 'compliment'];
+            textareas.forEach(id => {
+                const textarea = document.getElementById(id);
+                if (textarea) {
+                    textarea.addEventListener('input', () => updateCharCount(id, 500));
+                    updateCharCount(id, 500); // Initial count
+                }
+            });
+            
+            // Add character counter for student name
+            const nameInput = document.getElementById('studentName');
+            if (nameInput) {
+                nameInput.addEventListener('input', () => updateCharCount('studentName', 50));
+                updateCharCount('studentName', 50); // Initial count
+            }
+        });
+    </script>
+</body>
+</html>
